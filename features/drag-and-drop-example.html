@@ -1,0 +1,38 @@
+<section aria-labelledby="folder-heading">
+  <h2 id="folder-heading">Folder drop target</h2>
+  <article [appDropTarget]="dragType" (itemDropped)="dropOnFolder($event)">
+    <h3>{{ folder.name }}</h3>
+    <p>Drop a CV here to move it into this folder.</p>
+    <ul aria-live="polite">
+      @for (cv of folderCvs(); track cv.id) {
+        <li>
+          {{ cv.name }}
+          <button type="button" (click)="returnToList(cv.id)">Return to list</button>
+        </li>
+      } @empty {
+        <li>No CVs in this folder.</li>
+      }
+    </ul>
+  </article>
+</section>
+
+<section aria-labelledby="cv-heading">
+  <h2 id="cv-heading">Draggable CV list</h2>
+  <ul>
+    @for (cv of availableCvs(); track cv.id) {
+      <li>
+        <app-draggable [dragId]="cv.id" [dragType]="dragType">
+          <article>
+            <h3>{{ cv.name }}</h3>
+            <p>Drag this CV into the Applications folder.</p>
+            <button type="button" (click)="dropOnFolder({ type: dragType, id: cv.id })">
+              Move to Applications
+            </button>
+          </article>
+        </app-draggable>
+      </li>
+    } @empty {
+      <li>All CVs have been moved into the folder.</li>
+    }
+  </ul>
+</section>
